@@ -2,23 +2,23 @@ package com.example.manifestexplorer;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import test.AXMLPrinter;
+
 
 public class ManifestInfoActivity extends AppCompatActivity{
     private String fileText;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppliInfo app;
+        AXMLPrinter axmlPrinterInstance = new AXMLPrinter();
         setContentView(R.layout.manifestinfo);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -33,14 +33,15 @@ public class ManifestInfoActivity extends AppCompatActivity{
             ZipEntry manifest = apk.getEntry("AndroidManifest.xml");
             if (manifest != null){
                 InputStream stream = apk.getInputStream(manifest);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-                StringBuilder out = new StringBuilder();
+                axmlPrinterInstance.startParsing(stream);
+                //BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+                /*StringBuilder out = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null) {
                     Log.d("line: ", line);
                     out.append(line.trim());
-                }
-                fileText = out.toString();//doesnt work. NEED TO DO DECRYPTING -.-
+                }*/
+                fileText = axmlPrinterInstance.obtainString();//doesnt work. NEED TO DO DECRYPTING -.-
                 stream.close();
             }
             apk.close();
