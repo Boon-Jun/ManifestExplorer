@@ -41,7 +41,7 @@ public class ManifestInfoActivity extends AppCompatActivity{
                     Log.d("line: ", line);
                     out.append(line.trim());
                 }*/
-                fileText = axmlPrinterInstance.obtainString();//doesnt work. NEED TO DO DECRYPTING -.-
+                fileText = axmlPrinterInstance.obtainString();
                 stream.close();
             }
             apk.close();
