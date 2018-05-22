@@ -1,7 +1,15 @@
 package com.example.manifestexplorer;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.ChangeBounds;
+import android.transition.ChangeTransform;
+import android.transition.Explode;
+import android.transition.Slide;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +25,19 @@ public class ManifestInfoActivity extends AppCompatActivity{
     private String fileText;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // Apply activity transition
+            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+            //getWindow().setAllowReturnTransitionOverlap(true);
+            //getWindow().setAllowEnterTransitionOverlap(true);
+            //getWindow().setEnterTransition(new Slide());
+            //getWindow().setExitTransition(new Slide());
+            getWindow().setSharedElementExitTransition(new ChangeBounds());
+            getWindow().setSharedElementEnterTransition(new ChangeBounds());
+            //getWindow().setExitTransition(new ChangeTransform());
+        } else {
+            // Swap without transition
+        }
         AppliInfo app;
         AXMLPrinter axmlPrinterInstance = new AXMLPrinter();
         setContentView(R.layout.manifestinfo);
@@ -51,12 +72,17 @@ public class ManifestInfoActivity extends AppCompatActivity{
             e.printStackTrace();
             tv.setText("Manifest File not found");
         }
-
-
     }
     @Override
     public boolean onSupportNavigateUp() {
-        finish();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //finish();
+            finishAfterTransition();
+        } else {
+            // Swap without transition
+            finish();
+        }
+
         return true;
     }
 }
