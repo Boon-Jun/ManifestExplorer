@@ -1,16 +1,11 @@
 package com.example.manifestexplorer;
 
-import android.app.Activity;
-import android.app.ActivityOptions;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.ChangeBounds;
-import android.transition.ChangeTransform;
-import android.transition.Explode;
-import android.transition.Slide;
-import android.view.Window;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -23,27 +18,16 @@ import test.AXMLPrinter;
 
 public class ManifestInfoActivity extends AppCompatActivity{
     private String fileText;
+    private ScrollView sV;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // Apply activity transition
-            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-            //getWindow().setAllowReturnTransitionOverlap(true);
-            //getWindow().setAllowEnterTransitionOverlap(true);
-            //getWindow().setEnterTransition(new Slide());
-            //getWindow().setExitTransition(new Slide());
-            getWindow().setSharedElementExitTransition(new ChangeBounds());
-            getWindow().setSharedElementEnterTransition(new ChangeBounds());
-            //getWindow().setExitTransition(new ChangeTransform());
-        } else {
-            // Swap without transition
-        }
         AppliInfo app;
         AXMLPrinter axmlPrinterInstance = new AXMLPrinter();
         setContentView(R.layout.manifestinfo);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
         app = getIntent().getExtras().getParcelable("app");
+        sV = findViewById(R.id.scrollView2);
+        fadeIn();
         TextView tv = findViewById(R.id.textView);
         TextView tv2 = findViewById(R.id.textView2);
         tv2.setText(app.getTitle());
@@ -84,5 +68,10 @@ public class ManifestInfoActivity extends AppCompatActivity{
         }
 
         return true;
+    }
+    public void fadeIn(){
+        sV.setAlpha(0f);
+        sV.setVisibility(View.VISIBLE);
+        sV.animate().alpha(1f).setDuration(1000);
     }
 }

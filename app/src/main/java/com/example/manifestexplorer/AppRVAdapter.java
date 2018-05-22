@@ -51,10 +51,8 @@ public class AppRVAdapter extends RecyclerView.Adapter<AppRVAdapter.appViewHolde
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity)view.getContext(), Pair.create(view.findViewById(R.id.cardNoteTitle), "transition1"), Pair.create(view.findViewById(R.id.imageView4), "transition2"));
                     view.getContext().startActivity(intent, options.toBundle());
-
-                    //view.getContext().startActivity(intent);
+                    //overridePendingtransition()
                 } else {
-                    // Swap without transition
                     view.getContext().startActivity(intent);
                 }
             }
