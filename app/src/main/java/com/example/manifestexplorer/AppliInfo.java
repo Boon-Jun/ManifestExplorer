@@ -3,8 +3,11 @@ package com.example.manifestexplorer;
 import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
-public class AppliInfo implements Parcelable {
+import java.util.Comparator;
+
+public class AppliInfo implements Parcelable,Comparable<AppliInfo> {
     private Bitmap appIcon;
     private String appTitle;
     private String publicSourceDir;
@@ -53,5 +56,11 @@ public class AppliInfo implements Parcelable {
         dest.writeString(appTitle);
         dest.writeString(publicSourceDir);
         dest.writeValue(appIcon);
+    }
+
+    @Override
+    public int compareTo(@NonNull AppliInfo o) {
+
+        return appTitle.compareTo(o.getTitle());
     }
 }

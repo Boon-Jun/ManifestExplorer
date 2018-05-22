@@ -15,6 +15,7 @@ import android.transition.ChangeBounds;
 import android.view.Window;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
             }
             appInfoList.add(new AppliInfo(appName, bitmap, dir));
         }
+        Collections.sort(appInfoList);
         AppRVAdapter rvAdapter = new AppRVAdapter(this, appInfoList);
         rv = findViewById(R.id.rv);
         rv.setAdapter(rvAdapter);

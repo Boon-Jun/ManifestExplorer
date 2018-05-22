@@ -60,7 +60,7 @@ public class ManifestInfoActivity extends AppCompatActivity{
     @Override
     public boolean onSupportNavigateUp() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            //finish();
+            //swap with transition
             finishAfterTransition();
         } else {
             // Swap without transition
