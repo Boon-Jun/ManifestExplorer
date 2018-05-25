@@ -1,27 +1,38 @@
 package com.example.manifestexplorer;
 
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.ChangeBounds;
+import android.util.Log;
 import android.view.Window;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    ArrayList<AppliInfo> appInfoList = new ArrayList<>();
+    ArrayList<AppliInfo> appInfoList;
     RecyclerView rv;
     Bitmap bitmap;
+    public Handler mHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 1) {
+                appInfoList = (ArrayList<AppliInfo>) msg.obj;
+                AppRVAdapter rvAdapter = new AppRVAdapter(MainActivity.this, appInfoList);
+                rv = findViewById(R.id.rv);
+                rv.setAdapter(rvAdapter);
+                rv.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+            }else{
+                super.handleMessage(msg);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,26 +47,7 @@ public class MainActivity extends AppCompatActivity {
             getWindow().setSharedElementExitTransition(new ChangeBounds());
         }
         setContentView(R.layout.activity_main);
-        List<ApplicationInfo> apps = getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA | PackageManager.GET_SHARED_LIBRARY_FILES);//return list of Applications. Not to be messed up with AppliInfo as AppliInfo only contains relevant Info.
-        for (int x = 0; x < apps.size(); x++) {
-            ApplicationInfo someApp = apps.get(x);
-            String appName = someApp.loadLabel((getPackageManager())).toString();
-            String dir = someApp.publicSourceDir;
-            Drawable appIcon = someApp.loadIcon(getPackageManager());
-            if (appIcon instanceof BitmapDrawable) {//
-                bitmap = ((BitmapDrawable) appIcon).getBitmap();
-            } else {//else is adaptiveIcon
-                bitmap = Bitmap.createBitmap(appIcon.getIntrinsicWidth(), appIcon.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-                final Canvas canvas = new Canvas(bitmap);
-                appIcon.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-                appIcon.draw(canvas);
-            }
-            appInfoList.add(new AppliInfo(appName, bitmap, dir));
-        }
-        Collections.sort(appInfoList);
-        AppRVAdapter rvAdapter = new AppRVAdapter(this, appInfoList);
-        rv = findViewById(R.id.rv);
-        rv.setAdapter(rvAdapter);
-        rv.setLayoutManager(new LinearLayoutManager(this));
+        AppListGenerator generator = new AppListGenerator(this, mHandler);
+        generator.start();//start a thread to generate recycler view
     }
 }
