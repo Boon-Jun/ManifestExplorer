@@ -1,6 +1,5 @@
 package com.example.manifestexplorer;
 
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.ChangeBounds;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ProgressBar;
@@ -27,10 +25,10 @@ public class MainActivity extends AppCompatActivity {
             if (msg.what == 1) {
                 appInfoList = (ArrayList<AppliInfo>) msg.obj;
                 AppRVAdapter rvAdapter = new AppRVAdapter(MainActivity.this, appInfoList);
-                rv = findViewById(R.id.rv);
                 rv.setAdapter(rvAdapter);
                 rv.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-                pb.setVisibility(View.VISIBLE);
+                rv.animate().alpha(1).setDuration(500);
+                pb.setVisibility(View.INVISIBLE);
             }else if(msg.what == 2){
                 pb.setProgress((int)msg.obj);
                 super.handleMessage(msg);
@@ -53,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
             getWindow().setSharedElementExitTransition(new ChangeBounds());
         }
         setContentView(R.layout.activity_main);
+        rv = findViewById(R.id.rv);
+        rv.setAlpha(0);
         pb = findViewById(R.id.progressBar);
         pb.setIndeterminate(false);
         pb.setMax(100);
