@@ -11,14 +11,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.ChangeBounds;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     ArrayList<AppliInfo> appInfoList;
     RecyclerView rv;
-    Bitmap bitmap;
+    ProgressBar pb;
     public Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
@@ -28,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
                 rv = findViewById(R.id.rv);
                 rv.setAdapter(rvAdapter);
                 rv.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                pb.setVisibility(View.VISIBLE);
+            }else if(msg.what == 2){
+                pb.setProgress((int)msg.obj);
+                super.handleMessage(msg);
             }else{
                 super.handleMessage(msg);
             }
@@ -47,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
             getWindow().setSharedElementExitTransition(new ChangeBounds());
         }
         setContentView(R.layout.activity_main);
+        pb = findViewById(R.id.progressBar);
+        pb.setIndeterminate(false);
+        pb.setMax(100);
+        pb.setProgress(0);
+        pb.setVisibility(View.VISIBLE);
         AppListGenerator generator = new AppListGenerator(this, mHandler);
         generator.start();//start a thread to generate recycler view
     }

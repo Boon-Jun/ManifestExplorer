@@ -43,6 +43,8 @@ public class AppListGenerator extends Thread {
                 appIcon.draw(canvas);
             }
             appInfoList.add(new AppliInfo(appName, bitmap, dir));
+            Message msg = mHandler.obtainMessage(2,100*x/apps.size());
+            msg.sendToTarget();
         }
         Collections.sort(appInfoList);
         Message message = mHandler.obtainMessage(1, appInfoList);
