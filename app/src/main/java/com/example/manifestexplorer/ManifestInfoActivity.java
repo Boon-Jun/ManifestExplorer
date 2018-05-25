@@ -19,7 +19,9 @@ import test.AXMLPrinter;
 public class ManifestInfoActivity extends AppCompatActivity{
     private String fileText;
     private ScrollView sV;
+    private static boolean instanceExist = false;
     protected void onCreate(Bundle savedInstanceState) {
+        instanceExist = true;
         super.onCreate(savedInstanceState);
         AppliInfo app;
         AXMLPrinter axmlPrinterInstance = new AXMLPrinter();
@@ -57,6 +59,13 @@ public class ManifestInfoActivity extends AppCompatActivity{
             tv.setText("Manifest File not found");
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        instanceExist = false;
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -73,5 +82,9 @@ public class ManifestInfoActivity extends AppCompatActivity{
         sV.setAlpha(0f);
         sV.setVisibility(View.VISIBLE);
         sV.animate().alpha(1f).setDuration(1000);
+    }
+    //check if an instance already existed to prevent 2 ManifestInfoActivity from existing at once
+    public static boolean checkInstance(){
+        return instanceExist;
     }
 }

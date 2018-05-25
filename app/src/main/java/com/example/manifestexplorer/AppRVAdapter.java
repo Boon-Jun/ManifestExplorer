@@ -9,12 +9,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.CardView;
-import android.transition.ChangeTransform;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -44,6 +42,7 @@ public class AppRVAdapter extends RecyclerView.Adapter<AppRVAdapter.appViewHolde
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(ManifestInfoActivity.checkInstance())return;
                 Intent intent = new Intent(view.getContext(), ManifestInfoActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("app", app);

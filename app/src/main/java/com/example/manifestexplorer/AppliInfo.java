@@ -5,7 +5,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-import java.util.Comparator;
 
 public class AppliInfo implements Parcelable,Comparable<AppliInfo> {
     private Bitmap appIcon;

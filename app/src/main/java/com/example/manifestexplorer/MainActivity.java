@@ -23,7 +23,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 1) {
-                appInfoList = (ArrayList<AppliInfo>) msg.obj;
+                try {
+                    appInfoList = (ArrayList<AppliInfo>) msg.obj;
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 AppRVAdapter rvAdapter = new AppRVAdapter(MainActivity.this, appInfoList);
                 rv.setAdapter(rvAdapter);
                 rv.setLayoutManager(new LinearLayoutManager(MainActivity.this));
@@ -41,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(savedInstanceState != null) return;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // Apply activity transition
             getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
